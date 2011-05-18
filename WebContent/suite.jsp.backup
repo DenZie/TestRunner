@@ -1,0 +1,244 @@
+<jsp:useBean id="task" scope="session" class="com.den.utils.TaskBean"/>
+<%@page import="java.util.ArrayList,com.den.utils.*,com.den.utils.*,java.util.Set,java.util.Map,com.den.qa.qtf.Qtf" %>
+<% 
+Qtf qtf = new Qtf();
+qtf.initialise();
+ListTests lt = new ListTests();
+Map<String, Object[]> testclasses = lt.FetchTestClass();
+ArrayList<String> tc = lt.getTestClass(); %>
+<script language="javascript">
+var data =new Array();
+
+var jHistory;
+var xmlhttp = new getXMLObject();
+<% if (task.isRunning()) { %>
+	var xmlhttp = new getXMLObject();
+	var jResult;
+	var percent;
+	var total;
+	showProgress();
+<%}%>
+
+function getXMLObject()  //XML OBJECT
+{
+ var xmlHttp = false;
+ try {
+   xmlHttp = new ActiveXObject("Msxml2.XMLHTTP")  // For Old Microsoft Browsers
+ }
+ catch (e) {
+   try {
+     xmlHttp = new ActiveXObject("Microsoft.XMLHTTP")  // For Microsoft IE 6.0+
+   }
+   catch (e2) {
+     xmlHttp = false   // No Browser accepts the XMLHTTP Object then false
+   }
+ }
+ if (!xmlHttp && typeof XMLHttpRequest != 'undefined') {
+   xmlHttp = new XMLHttpRequest();        //For Mozilla, Opera Browsers
+ }
+ return xmlHttp;  // Mandatory Statement returning the ajax object created
+}
+
+	//xmlhttp holds the ajax object
+
+function showProgress() {
+	if(xmlhttp) { 
+	  xmlhttp.open("GET","result.jsp" ,true); //gettime will be the servlet name
+	  xmlhttp.onreadystatechange  = handleServerResponse;
+	  xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	  xmlhttp.send(null);
+	}
+}
+
+function showHistory() {
+	if(xmlhttp) { 
+	  xmlhttp.open("GET","history.jsp" ,true); //gettime will be the servlet name
+	  xmlhttp.onreadystatechange  = handleHistoryRespose;
+	  xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	  xmlhttp.send(null);
+	}
+}
+
+function handleHistoryRespose() {
+	hDiv = document.getElementById("historyDiv");
+	 if (xmlhttp.readyState == 4) {
+	   if(xmlhttp.status == 200) {
+	     jHistory = eval('(' + xmlhttp.responseText +')'); //Update the HTML Form element 
+	     var historyHtml = "";
+	     for(i in jHistory) {
+	    	jTest = jHistory[i];
+	    	var style = "style='color: red;'";
+	    	if(jTest.result) {
+	    		style = "style='color: green;'";
+		    } 
+	    	var patt = /(\d+$)/i;
+	    	var name = jTest.name;
+	    	var folder = name.match(patt);
+	    	var param ="";
+	    	if(folder!=undefined) {
+	    		param = "?test=" + folder[0];
+		    } 
+		    historyHtml = historyHtml + "<a " + style + " href='showResult.jsp" + param +"'> [" +  + i + "] " + jTest.name + " ( Took " + jTest.duration+ " ms. ) " + "</a></br>";
+		}
+	    hDiv.innerHTML = historyHtml;
+	   }
+	   }
+	};
+	
+
+function handleServerResponse() {
+ if (xmlhttp.readyState == 4) {
+   if(xmlhttp.status == 200) {
+     jResult = eval('(' + xmlhttp.responseText +')'); //Update the HTML Form element 
+	total = jResult.total;
+	if(total> 0 ) {
+	     percent = (jResult.progress * 100 ) / total;
+		if (percent < 100) {
+			document.getElementById("resultDiv").style.display="block";
+			document.getElementById("test").style.width = percent + "%";
+  			setTimeout(showProgress, 1000);
+       	} else {
+       		document.getElementById("test").style.width = "100%";
+       		setTimeout(document.getElementById("resultDiv").style.display="none", 1000);
+           	setTimeout("location='stop.jsp'", 100);
+        }
+  		}else {
+  	  	setTimeout(showProgress, 5000);
+  	}
+   }
+   }
+};
+
+function renderClassList() {
+	selectBox = document.getElementById("sltTC");
+	var tag ="";
+	for(var key in data) {
+		tag = tag +"<option value='"+ key +"'>" + key +"</option>";
+    }
+	selectBox.innerHTML= tag;
+	selectBox.selectedIndex=0;
+	renderMethodList(selectBox);
+};
+
+function validate(from) {
+	var selMethod = document.getElementById("sltM");
+	if(selMethod.selectedIndex== -1 ) {
+		var divMsg = document.getElementById("msgdiv");
+		divMsg.innerHTML = "Are you crazy? No methods selected for run. :)";
+		var t=setTimeout('document.getElementById("msgdiv").innerHTML=""',3000);
+	} else {
+		document.getElementById("suiteForm").submit();
+	}
+};
+
+function renderMethodList(el) {
+	var methodDiv = document.getElementById("divTM");
+	var tag="<select id='sltM' name='sltM' multiple='multiple'>";
+	var optns = el.options;
+	for (i = 0; i < optns.length; i++) {
+		if (optns[i].selected) {
+			cls =  optns[i].value;
+			mts = data[cls];
+			for(var mtdkey in mts) {
+				method= mts[mtdkey];
+				tag = tag + "<option value='" + cls + ":" + method+ "'>"+method+"</option>";
+		    }
+		} 
+	}
+	tag = tag + "</select>"
+	methodDiv.innerHTML= tag;
+};
+
+function loadData() {
+	<%for (String s: tc) {
+		Object[] mts = testclasses.get(s);
+		s=s.replace(".", "_");
+	%>
+	var mtsobj = new Array();
+	<%for(int i=0;i<mts.length;i++) {
+		String method= mts[i].toString();
+	%>
+	mtsobj[<%=i%>]= "<%=method%>";
+	<%}%>
+	data["<%=s%>"] = mtsobj; 
+	<%}%>
+	renderClassList();
+	xmlhttp = new getXMLObject();
+	showHistory();
+	
+};
+</script>
+<html>
+<head> <title>QTF : Test Runner Interface</title>
+<style type="text/css">
+body{font:small "Myriad Pro", sans-serif;}
+h1{font-size:1.5em;}
+h2{color:#666;font-size:1em;font-weight:normal;}
+
+/*= Core CSS progress bar code */
+.progressbar {
+    width: 300px;
+    background: url(progressbar.png) no-repeat 0 -40px;
+}
+.progressbar-completed {
+    height: 20px;
+    margin-left: -1px;
+    background: url(progressbar.png) no-repeat 1px 0;
+}
+.progressbar-completed div {
+    float: right;
+    width: 50%;
+    height: 20px;
+    margin-right: -1px;
+    background: url(progressbar.png) no-repeat 100% 0;
+    display: inline; /* IE 6 double float bug */
+}
+</style>
+	</head>
+	<body onload="loadData();">
+		<h1 align="center">Test Suite Selector</h1><div id="msgdiv" style="position:absolute;top:0;right:0;background:#ff0;border:1px solid #ddd;"></div>
+		<form id="suiteForm" method="post" action="start.jsp">
+			<table width="60%" align="center" style="noborder" cellspacing="2">
+			<thead>
+			<tr><td>
+				Test Classes:
+			</td><td>
+				Test Methods:
+			</td></tr>
+			</thead>
+				<tr>
+					<td>
+						<div id="divTC">
+						<select id="sltTC" name="sltTC" multiple="multiple"  onchange="renderMethodList(this)" ></select>
+						</div>
+					</td><td>
+						
+						<div id="divTM"></div>
+					</td>
+				</tr>
+					<td align="center">
+						<input type="submit" value="Run Selected Tests" onClick="validate('suiteform');return false;"> 
+					</td>
+					<td align="center">
+							
+					</td>
+					
+				</tr>
+			</table>
+			<div id="resultDiv" style="display: none">
+				<h5>Test Execution Progress.</h5>
+	    		<div class="progressbar">
+	        		<div id="test" class="progressbar-completed" style="width:0;">
+	        			<div>&nbsp;</div>
+	        		</div>
+	    		</div>
+    		</div>
+    		
+    		<h3>Build History</h3>
+    		<div id="historyDiv" ></div>
+		</form>
+<%//}%> 
+
+	</body> 
+</html>
+
