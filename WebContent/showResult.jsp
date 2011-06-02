@@ -1,4 +1,4 @@
-<%@page import="com.den.qa.qtf.ResultRender" %>
+<%@page import="com.clearspring.qa.qtf.ResultRender" %>
 <html>
 <head>
 </head>
