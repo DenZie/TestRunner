@@ -9,23 +9,6 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry exported="true" kind="lib" path="/Users/densildesilva/.m2/repository/org/seleniumhq/selenium/selenium-firefox-driver/2.0b3/selenium-firefox-driver-2.0b3.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/testng-6.0.1.jar">
-		<attributes>
-			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/densildesilva/.m2/repository/org/mortbay/jetty/servlet-api-2.5/6.1.8/servlet-api-2.5-6.1.8.jar">
-		<attributes>
-			<attribute name="maven.groupId" value="org.mortbay.jetty"/>
-			<attribute name="maven.artifactId" value="servlet-api-2.5"/>
-			<attribute name="maven.version" value="6.1.8"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/testng-6.0.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
