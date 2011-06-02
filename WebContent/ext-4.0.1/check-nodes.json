@@ -1,0 +1,52 @@
+[{
+    "text": "com.den.qa.qtf.utils.first", 
+    "cls": "folder",
+    "expanded": true,
+    "children": [{
+        "text": "test1",
+        "leaf": true,
+        "checked": true
+    },{
+        "text": "test2",
+        "leaf": true,
+        "checked": false
+    },{
+        "text": "test3",
+        "leaf": true,
+        "checked": false
+    }]
+},{
+    "text": "com.den.qa.qtf.utils.second", 
+    "cls": "folder",
+    "expanded": true,
+    "children": [{
+        "text": "test1",
+        "leaf": true,
+        "checked": true
+    },{
+        "text": "test2",
+        "leaf": true,
+        "checked": false
+    },{
+        "text": "test3",
+        "leaf": true,
+        "checked": false
+    }]
+},{
+    "text": "com.den.qa.qtf.utils.third", 
+    "cls": "folder",
+    "expanded": true,
+    "children": [{
+        "text": "test1",
+        "leaf": true,
+        "checked": true
+    },{
+        "text": "test2",
+        "leaf": true,
+        "checked": false
+    },{
+        "text": "test3",
+        "leaf": true,
+        "checked": false
+    }]
+}]
