@@ -225,7 +225,14 @@ Ext.onReady(function() {
         buttons: [{
             text: 'Run Test',
             handler:function() {
-        		form.submit();
+    		form.submit({
+  			  url : 'start.jsp',
+  			  params : {"Mlist" : getMethodList()},
+  			  success : function(form, action) {
+  			  },
+  			  failure : function(form, action) {
+  			  }
+  			});
         		showProgress();
         		tree.store.load();
         		Ext.getBody().unmask();
@@ -240,6 +247,16 @@ Ext.onReady(function() {
         }]
     });
 
+	function getMethodList(){
+		var methods = new Array();
+		var i=0;
+		var records = tree.getChecked();
+		Ext.Array.each(records, function(rec){
+			methods[i++] = rec.parentNode.get('text') + "::" + rec.get('text');
+		});
+		return methods;
+	};
+	
     //The start button, which starts everything
     Ext.create('Ext.button.Button', {
         text: 'Start',
@@ -255,17 +272,18 @@ Ext.onReady(function() {
 			            icon: Ext.MessageBox.WARNING
     				});
     			} else {
-					clearMethodList();
-    				Ext.Array.each(records, function(rec){
-    					var name = new Ext.form.TextField({
-    						fieldLabel:'Name',
-    						value: rec.parentNode.get('text') + "::" + rec.get('text'),
-							hidden: true,
-							name:'Mlist'
-    					});
-    					form.add(name);
-    					form.doLayout();
-    				});
+//    				clearMethodList();
+//    				Ext.Array.each(records, function(rec){
+//    					var name = new Ext.form.TextField({
+//    						fieldLabel:'Name',
+//    						value: rec.parentNode.get('text') + "::" + rec.get('text'),
+//							hidden: true,
+//							name:'Mlist'
+//    					});
+//    					form.add(name);
+//    					form.doLayout();
+//    					alert(form.items.length);
+//    				});
     		Ext.getBody().mask();
 			win.show();
 			}

@@ -134,6 +134,7 @@ public class TaskBean implements Runnable, Serializable {
 	}
 
     public void createXmlSuite(String [] mts, HashMap<String,String> parameters) {
+
     	createTestMethodMap(mts);
 		cleanLog();
 		createVirtualSuite(parameters);
@@ -144,6 +145,7 @@ public class TaskBean implements Runnable, Serializable {
     }
 
 	public void createTestMethodMap(String[] methods) {
+		testMethodMap.clear();
 		for(String m: methods) {
 			m = m.replace("_", ".");
 			String[] arMC = m.split("::");
