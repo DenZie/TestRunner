@@ -133,11 +133,15 @@ public class TaskBean implements Runnable, Serializable {
 		hLogger.logBuildEnd();
 	}
 
-    public void createXmlSuite(String [] mts, HashMap<String,String> parameters) {
-
+    public void createXmlSuite(String [] mts, HashMap<String,String> parameters) {	
     	createTestMethodMap(mts);
 		cleanLog();
 		createVirtualSuite(parameters);
+    }
+    
+    public void createXmlSuite(String [] mts, String suiteName) {	
+    	createTestMethodMap(mts);
+		createVirtualSuite(suiteName);
     }
     
     public void showSuiteXml() {
@@ -182,8 +186,12 @@ public class TaskBean implements Runnable, Serializable {
 		testSuite = new XmlSuite();
 		testSuite.setParameters(parameters);
 		testSuite.setName("QTF_" + suiteName);
+		XmlTest test = setTestXml(suiteName);
+	}
+	
+	public XmlTest setTestXml(String suiteName) {
 		XmlTest test = new XmlTest(testSuite);
-		test.setName("QTF_Test_" + suiteName);
+		test.setName("QTF_Test");
 		Set<String> stClass = testMethodMap.keySet();
 		Iterator<String> it = stClass.iterator();
 		List<XmlClass> classes = new ArrayList<XmlClass>();
@@ -199,6 +207,22 @@ public class TaskBean implements Runnable, Serializable {
 			classes.add(xmlcls);
 			test.setXmlClasses(classes) ;
 		}
+		return test;
+	}
+	
+	public void createVirtualSuite(String suiteName) {
+		arc = new Archiver();
+		testSuite = new XmlSuite();
+		testSuite.setName("QTF_" + suiteName);
+		XmlTest test = setTestXml(suiteName);
+		saveSuite(suiteName);
+	}
+	
+	public void saveSuite(String fileName) {
+		Qtf qtf = new Qtf();
+		fileName = qtf.getSuiteFolder() + qtf.fileSep + fileName + ".xml";
+		System.out.println("***Suite File*** " + fileName );
+		Io.writeToFile(fileName, testSuite.toXml().toString());
 	}
 
 	public String getLog() throws InterruptedException {

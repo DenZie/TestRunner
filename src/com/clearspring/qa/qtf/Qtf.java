@@ -11,6 +11,7 @@ public class Qtf {
 	public String testOutDir;
 	public String settingsFile;
 	public String suitefile;
+	public String suiteFolder;
 	
 	public Qtf() {
 		fileSep = System.getProperty("file.separator");
@@ -20,6 +21,7 @@ public class Qtf {
 		testOutDir = "test-output";
 		settingsFile = "settings.xml";
 		suitefile = "suiteMap.json";
+		suiteFolder = "suites";
 	}
 	
 	public  boolean initialise() {
@@ -33,6 +35,16 @@ public class Qtf {
 		String usrDir = System. getProperty("user.home");
 		String qtfHome = usrDir + fileSep + ".qtf" ;
 		return qtfHome;
+	}
+	
+	public  String getSuiteFolder() {
+ 		String sf =  homeDir + fileSep + suiteFolder;
+ 		File suitefolder = new File(sf);
+ 		if(!suitefolder.exists()) {
+ 			suitefolder.mkdir();
+ 		}
+		return sf;
+		
 	}
 	
 	public  String getTestResultFolder() {
