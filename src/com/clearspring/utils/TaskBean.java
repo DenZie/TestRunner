@@ -139,11 +139,6 @@ public class TaskBean implements Runnable, Serializable {
 		createVirtualSuite(parameters);
     }
     
-    public void createXmlSuite(String [] mts, String suiteName) {	
-    	createTestMethodMap(mts);
-		createVirtualSuite(suiteName);
-    }
-    
     public void showSuiteXml() {
     	System.out.println(testSuite.toXml().toString());
     }
@@ -210,21 +205,6 @@ public class TaskBean implements Runnable, Serializable {
 		return test;
 	}
 	
-	public void createVirtualSuite(String suiteName) {
-		arc = new Archiver();
-		testSuite = new XmlSuite();
-		testSuite.setName("QTF_" + suiteName);
-		XmlTest test = setTestXml(suiteName);
-		saveSuite(suiteName);
-	}
-	
-	public void saveSuite(String fileName) {
-		Qtf qtf = new Qtf();
-		fileName = qtf.getSuiteFolder() + qtf.fileSep + fileName + ".xml";
-		System.out.println("***Suite File*** " + fileName );
-		Io.writeToFile(fileName, testSuite.toXml().toString());
-	}
-
 	public String getLog() throws InterruptedException {
 		Qtf qtf = new Qtf();
 		String logFileName = qtf.getLogFileName();

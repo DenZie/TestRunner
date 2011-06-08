@@ -28,6 +28,12 @@ Ext.onReady(function() {
 	        extend: 'Ext.data.Model',
 	        fields: ['id', 'result', {name:'duration', type: 'float'}, 'name']
 	    });
+	    
+	    Ext.define('suite', {
+	        extend: 'Ext.data.Model',
+	        fields: ['name', 'created', 'methods']
+	    });
+	    
 	    store = Ext.create('Ext.data.JsonStore', {
 	        model: 'ImageModel',
 	        proxy: {
@@ -39,6 +45,19 @@ Ext.onReady(function() {
 	            }
 	        }
 	    });
+	    
+		var suiteStore = new Ext.data.Store({
+		    model: 'suite',
+		    proxy: {
+		        type: 'ajax',
+		        url: 'saveSuite.jsp',
+		        reader: {
+		            type: 'json',
+		            root: 'suites'
+		        }
+		    },
+	        autoLoad: true
+		});
 	   
 	    function result(val) {
 	        if (val == true) {
@@ -93,6 +112,50 @@ Ext.onReady(function() {
 	    }]
 	    });
 	    
+	    var suites = Ext.create('Ext.grid.Panel', {
+	        width:300,
+	        height:400,
+	        collapsible:false,
+	        direction: 'DSC',
+	        title:'QTF - Saved Suites ',
+	        renderTo: 'suiteDiv',
+	        store: suiteStore,
+	        multiSelect: true,
+	        viewConfig: {
+	            emptyText: 'No Suite List'
+	        },
+
+	        columns: [{
+	            text: 'Suite Name',
+	            flex: 3,
+	            dataIndex: 'name'
+	        }]
+	    });
+	    function handleNodes() {
+	    };
+	    suites.getSelectionModel().on('selectionchange', function(sm, selectedRecord) {
+	    	clearSuiteMap();
+	        if (selectedRecord.length) {
+	            var root = tree.getRootNode();
+	            var methods = selectedRecord[0].data.methods;
+	    		Ext.Array.each(methods, function(m){
+	    			var fulldata = m.split("::");
+	    			var cNode = root.findChild( "text", fulldata[0], true );
+	    			cNode.expand();
+	    			var mNode = cNode.findChild( "text", fulldata[1], true );
+	    			mNode.set("checked", true);
+	    		});
+	        }
+	    });
+	    
+	    function clearSuiteMap() {
+	    	tree.collapseAll();
+	    	var records = tree.getChecked();
+			Ext.Array.each(records, function(rec){
+				rec.set("checked", false);
+			});
+	    }
+	    
 		/************Suite Tree *******************/
 	   var tree = Ext.create('Ext.tree.Panel', {
 		   id: 'suiteTree',
@@ -123,15 +186,6 @@ Ext.onReady(function() {
 	                text: 'Save Suite',
 	                handler: function(){
 	        			Ext.MessageBox.prompt('suiteName', 'Suite Name Please! :', saveSuite);
-//	        			form.items
-//						form.submit({
-//							url : 'start.jsp',
-//							params : {"Mlist" : getMethodList(), "run": false},
-//							success : function(form, action) {
-//							},
-//							failure : function(form, action) {
-//							}
-//						});
 	        		}
 	            }
 	        }]

@@ -45,7 +45,7 @@ public class HistoryLogger {
 	
 	public void create() {
 		createXml();
-		writeToFile();
+		Io.writeXmlToFile(historyFileName, docHistory);
 	}
 	
 	public void createXml() {
@@ -72,7 +72,7 @@ public class HistoryLogger {
 	
 	public void logBuildEnd() {
 		histNode.appendChild(buildNode);
-		writeToFile();
+		Io.writeXmlToFile(historyFileName, docHistory);
 	}
 	    
 	public void createBuildNode() {
@@ -100,21 +100,6 @@ public class HistoryLogger {
 			fileReady = false;
 		}
 		return fileReady;
-	}
-	
-	public void writeToFile() {
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			//initialize StreamResult with File object to save to file
-			StreamResult result = new StreamResult(new FileOutputStream(historyFileName));
-			DOMSource source = new DOMSource(docHistory);
-			transformer.transform(source, result);
-			String xmlString = result.getWriter().toString();
-			System.out.println(xmlString);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 	}
 	
 	public int getBuildCount() {

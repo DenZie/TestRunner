@@ -10,10 +10,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.apache.commons.io.IOUtils;
@@ -131,4 +137,33 @@ public class Io {
 
 	}
 	
+	
+	public static ArrayList<String> getfileList(String folderName) {
+		ArrayList<String> fileList = new ArrayList<String>();
+		File folder = new File(folderName);
+		String type = "xml"; // replace what ever type of file you need to search
+		
+		if (folder.isDirectory() && folder != null) {
+			for (File f : folder.listFiles()) {
+				if (f.isFile() && f.getName().endsWith(type)) {
+					fileList.add(f.getName());
+				}
+			}
+		}
+		return fileList;
+	}
+	
+	public static void writeXmlToFile(String fileName, Document doc) {
+		try {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			//initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult(new FileOutputStream(fileName));
+			DOMSource source = new DOMSource(doc);
+			transformer.transform(source, result);
+			String xmlString = result.getWriter().toString();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 }
