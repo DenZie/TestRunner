@@ -45,19 +45,22 @@ Ext.onReady(function() {
 		    	    }
 		    	});
     		} else {
-    			alert("Name Already exists! Pick you next chioice of name :) ");
+    			alert("Name Already exists! Pick your next chioice :) ");
     		}
     	} else {alert("You are Crazy!");}
     };
 
 	function validateSuiteName(suiteName){
 		var suiteData = suiteStore.data;
+		var status =true;
 		suiteData.each(function(rec) {
 			var nm = rec.data.name;
 			if (suiteName == nm) {
+				status = false;
 				return false;
 			}
-		});
+		} );
+		return status;
 	}
 
     function clearSuiteMap() {
