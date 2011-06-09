@@ -13,7 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.testng.annotations.Test;
 
-import com.clearspring.json.JSONArray;
+import org.json.JSONArray;
 import com.clearspring.utils.ClassFinder;
 
 public class TestFinder {

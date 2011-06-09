@@ -5,7 +5,7 @@
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script type="text/javascript" src="js/Spotlight.js"></script>
 	<script type="text/javascript" src="js/form.js"></script>
-	<link rel="stylesheet" type="text/css" href="list-view.css" />
+	<link rel="stylesheet" type="text/css" href="css/list-view.css" />
     <style>
         .x-tree-checked {
             text-decoration: line-through;
@@ -89,6 +89,9 @@ function showProgress() {
 			<tr>
 				<td>
 					<div id="tree-div"></div>
+				</td>
+				<td>
+					<div id="suiteDiv"></div>
 				</td>
 				<td>
 	    			<div id="historyDiv" ></div>
