@@ -1,4 +1,5 @@
 <jsp:useBean id="task" scope="application" class="com.clearspring.utils.TaskBean"/>
+<%@ include file="header.jsp" %>
 	<%@page import="java.util.ArrayList,com.clearspring.utils.*,com.clearspring.utils.*,java.util.Set,java.util.Map,com.clearspring.qa.qtf.Qtf" %>
     <link rel="stylesheet" type="text/css" href="resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="css/example.css" />
@@ -6,15 +7,6 @@
     <script type="text/javascript" src="js/Spotlight.js"></script>
 	<script type="text/javascript" src="js/form.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/list-view.css" />
-    <style>
-        .x-tree-checked {
-            text-decoration: line-through;
-            color: #777;
-        }
-        .x-grid-row-selected .x-grid-cell {
-            background-color: #efefef !important;
-        }
-    </style>
 <script language="javascript">
 <% if(task.isRunning()) {%>
 	showProgress();
@@ -58,33 +50,8 @@ function showProgress() {
 <html>
 	<head>
 		<title>QTF : Test Runner Interface</title>
-		<style type="text/css">
-		body{font:small "Myriad Pro", sans-serif;}
-		h1{font-size:1.5em;}
-		h2{color:#666;font-size:1em;font-weight:normal;}
-		
-		/*= Core CSS progress bar code */
-		.progressbar {
-		    width: 300px;
-		    background: url(progressbar.png) no-repeat 0 -40px;
-		}
-		.progressbar-completed {
-		    height: 20px;
-		    margin-left: -1px;
-		    background: url(progressbar.png) no-repeat 1px 0;
-		}
-		.progressbar-completed div {
-		    float: right;
-		    width: 50%;
-		    height: 20px;
-		    margin-right: -1px;
-		    background: url(progressbar.png) no-repeat 100% 0;
-		    display: inline; /* IE 6 double float bug */
-		}
-		</style>
 	</head>
 	<body>
-		<h1 align="center">Test Suite Selector</h1> <div id="msgdiv" style="position:absolute;top:0;right:0;background:#ff0;border:1px solid #ddd;"></div>
 		<table>
 			<tr>
 				<td>

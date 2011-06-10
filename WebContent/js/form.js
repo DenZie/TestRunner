@@ -177,6 +177,20 @@ Ext.onReady(function() {
             flex: 15
     }]
     });
+    
+//    history.getSelectionModel().on('selectionchange', function(sm, selectedRecord) {
+//        if (selectedRecord.length) {
+//            var root = tree.getRootNode();
+//            var methods = selectedRecord[0].data.methods;
+//    		Ext.Array.each(methods, function(m){
+//    			var fulldata = m.split("::");
+//    			var cNode = root.findChild( "text", fulldata[0], true );
+//    			cNode.expand();
+//    			var mNode = cNode.findChild( "text", fulldata[1], true );
+//    			mNode.set("checked", true);
+//    		});
+//        }
+//    });
 
     /************Saved Suites *******************/
     Ext.define('suite', {
