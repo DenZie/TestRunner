@@ -37,6 +37,10 @@ public class Qtf {
 		return qtfHome;
 	}
 	
+	public  String getSettingsFile() {
+		return (homeDir + fileSep + settingsFile) ;
+	}
+	
 	public  String getSavedSuiteFile() {
  		String sf =  homeDir + fileSep + savedSuites;
 		return sf;

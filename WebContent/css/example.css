@@ -63,3 +63,6 @@ pre.code{
     margin-left: 17px;
     margin-bottom: 4px;
 }
+.icon-add {
+    background-image: url("../images/add.png") !important;
+}
